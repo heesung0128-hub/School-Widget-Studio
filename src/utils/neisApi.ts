@@ -23,9 +23,9 @@ export const DEFAULT_OFFICES = [
 export const DEFAULT_SCHOOL: SchoolInfo = {
   officeCode: 'B10',
   officeName: '서울특별시교육청',
-  schoolCode: '7010057',
-  schoolName: '서울고등학교',
-  location: '서울특별시 서초구 효령로 218',
+  schoolCode: '7010152',
+  schoolName: '동덕여자고등학교',
+  location: '서울특별시 서초구 효령로2길 123-5',
 };
 
 // Clean NEIS allergy markup like "현미밥 (1.5.6)" or "<br/>"

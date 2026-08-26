@@ -38,9 +38,9 @@ const STORAGE_KEY = 'school_widget_config_v1';
 const DEFAULT_CONFIG: WidgetConfig = {
   school: DEFAULT_SCHOOL,
   ddays: [
-    { id: '1', title: '1학기 중간고사', targetDate: '2026-09-28' },
-    { id: '2', title: '겨울방학식', targetDate: '2026-12-30' },
-    { id: '3', title: '대학수학능력시험', targetDate: '2026-11-19' },
+    { id: '1', title: '1학기 중간고사', targetDate: '2026-09-30' },
+    { id: '2', title: '대학수학능력시험', targetDate: '2026-11-19' },
+    { id: '3', title: '겨울방학식', targetDate: '2026-12-30' },
   ],
   timetable: [
     { day: '월', periods: ['문학 (3-1)', '문학 (3-2)', '상담', '수업준비', '진로지도', '동아리', '종례'] },
@@ -64,9 +64,9 @@ const DEFAULT_CONFIG: WidgetConfig = {
     { id: '3', text: '학부모 상담 일지 작성', completed: false, createdAt: Date.now() - 7200000 },
   ],
   theme: 'dark-acrylic',
-  opacity: 0.92,
+  opacity: 1.0,
   alwaysOnTop: true,
-  snapMargin: 20,
+  snapMargin: 0,
   mealSwitchTime: '13:30',
   showAllergies: true,
   showCalories: true,
@@ -92,11 +92,11 @@ const GuideSection: React.FC = () => {
     <div className="space-y-6 text-slate-200">
       {/* Intro Banner */}
       <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-900/40 via-indigo-900/30 to-purple-900/40 border border-blue-500/30">
-        <div className="flex items-center gap-2 text-blue-400 font-bold text-sm mb-1">
+        <div className="flex items-center gap-2 text-blue-400 font-bold text-base mb-1">
           <Sparkles className="w-4 h-4" />
           <span>코딩을 몰라도 1분 만에 따라하는 윈도우 위젯 실행 가이드</span>
         </div>
-        <p className="text-xs text-slate-300 leading-relaxed">
+        <p className="text-sm text-slate-300 leading-relaxed">
           별도의 프로그램 설치 없이, 윈도우에 기본 내장된 <strong>PowerShell</strong>을 이용하여 안전하고 깔끔하게 바탕화면 위젯을 띄울 수 있습니다.
         </p>
       </div>
@@ -107,19 +107,19 @@ const GuideSection: React.FC = () => {
         <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3 relative overflow-hidden">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center">
+              <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-sm flex items-center justify-center">
                 1
               </span>
-              <h4 className="text-sm font-bold text-white">스크립트 파일 다운로드</h4>
+              <h4 className="text-base font-bold text-white">스크립트 파일 다운로드</h4>
             </div>
-            <span className="text-[11px] text-blue-400 font-medium">초간단</span>
+            <span className="text-[13px] text-blue-400 font-medium">초간단</span>
           </div>
 
-          <p className="text-xs text-slate-300 leading-relaxed">
+          <p className="text-sm text-slate-300 leading-relaxed">
             상단의 <strong>[.ps1 다운로드]</strong> 버튼을 눌러 <code>NEWSchoolWidget.ps1</code> 파일을 원하는 폴더(예: 바탕화면이나 내 문서)에 저장합니다.
           </p>
 
-          <div className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-[11px] text-slate-400 space-y-1">
+          <div className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-[13px] text-slate-400 space-y-1">
             <div className="text-slate-300 font-semibold">💡 직접 복사해서 저장하는 경우:</div>
             <div>1. 메모장을 엽니다.</div>
             <div>2. [전체 코드 복사] 버튼을 눌러 붙여넣기합니다.</div>
@@ -131,20 +131,20 @@ const GuideSection: React.FC = () => {
         <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3 relative overflow-hidden">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center">
+              <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-sm flex items-center justify-center">
                 2
               </span>
-              <h4 className="text-sm font-bold text-white">스크립트 실행 권한 허용 (최초 1회)</h4>
+              <h4 className="text-base font-bold text-white">스크립트 실행 권한 허용 (최초 1회)</h4>
             </div>
-            <span className="text-[11px] text-amber-400 font-medium">필수 설정</span>
+            <span className="text-[13px] text-amber-400 font-medium">필수 설정</span>
           </div>
 
-          <p className="text-xs text-slate-300 leading-relaxed">
+          <p className="text-sm text-slate-300 leading-relaxed">
             윈도우 기본 보안으로 인해 스크립트 실행이 차단되어 있을 수 있습니다. 아래 명령어로 본인 계정의 스크립트 실행을 1회 허용해 줍니다.
           </p>
 
           <div className="space-y-1.5">
-            <div className="flex items-center justify-between text-[11px] text-slate-400">
+            <div className="flex items-center justify-between text-[13px] text-slate-400">
               <span>PowerShell 창에 붙여넣을 명령어:</span>
               <button
                 type="button"
@@ -155,7 +155,7 @@ const GuideSection: React.FC = () => {
                 <span>{copiedIndex === 1 ? '복사됨' : '명령어 복사'}</span>
               </button>
             </div>
-            <div className="p-2 rounded-lg bg-slate-950 font-mono text-[11px] text-emerald-400 border border-slate-800 select-all overflow-x-auto">
+            <div className="p-2 rounded-lg bg-slate-950 font-mono text-[13px] text-emerald-400 border border-slate-800 select-all overflow-x-auto">
               Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
             </div>
           </div>
@@ -165,15 +165,15 @@ const GuideSection: React.FC = () => {
         <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3 relative overflow-hidden">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center">
+              <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-sm flex items-center justify-center">
                 3
               </span>
-              <h4 className="text-sm font-bold text-white">마우스 우클릭으로 바로 실행</h4>
+              <h4 className="text-base font-bold text-white">마우스 우클릭으로 바로 실행</h4>
             </div>
-            <span className="text-[11px] text-emerald-400 font-medium">실행 방법</span>
+            <span className="text-[13px] text-emerald-400 font-medium">실행 방법</span>
           </div>
 
-          <div className="space-y-2 text-xs text-slate-300 leading-relaxed">
+          <div className="space-y-2 text-sm text-slate-300 leading-relaxed">
             <div className="flex items-start gap-2">
               <span className="text-emerald-400 font-bold">방법 A (추천).</span>
               <span><strong>[올인원 .bat 다운로드]</strong>로 받은 <code>NEWSchoolWidget_원클릭_실행.bat</code> 파일을 더블 클릭합니다. (.ps1 파일 없이 단독 실행 가능!)</span>
@@ -184,7 +184,7 @@ const GuideSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-2.5 rounded-xl bg-amber-950/40 border border-amber-500/20 text-[11px] text-amber-300 space-y-1">
+          <div className="p-2.5 rounded-xl bg-amber-950/40 border border-amber-500/20 text-[13px] text-amber-300 space-y-1">
             <div className="font-semibold flex items-center gap-1 text-amber-200">
               <ShieldAlert className="w-3.5 h-3.5" />
               <span>'Windows의 PC 보호' 또는 '실행할 수 없는 앱' 창이 뜨나요?</span>
@@ -194,7 +194,7 @@ const GuideSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/20 text-[11px] text-emerald-300 flex items-center gap-2">
+          <div className="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/20 text-[13px] text-emerald-300 flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 shrink-0" />
             <span>실행 즉시 모니터 우측 상단에 투명 아크릴 위젯이 깔끔하게 부착됩니다!</span>
           </div>
@@ -204,19 +204,19 @@ const GuideSection: React.FC = () => {
         <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3 relative overflow-hidden">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-xs flex items-center justify-center">
+              <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-sm flex items-center justify-center">
                 4
               </span>
-              <h4 className="text-sm font-bold text-white">컴퓨터 켤 때 자동 실행 (시작프로그램)</h4>
+              <h4 className="text-base font-bold text-white">컴퓨터 켤 때 자동 실행 (시작프로그램)</h4>
             </div>
-            <span className="text-[11px] text-purple-400 font-medium">편리한 팁</span>
+            <span className="text-[13px] text-purple-400 font-medium">편리한 팁</span>
           </div>
 
-          <p className="text-xs text-slate-300 leading-relaxed">
+          <p className="text-sm text-slate-300 leading-relaxed">
             컴퓨터를 켤 때마다 자동으로 위젯이 뜨게 하려면 윈도우 시작프로그램 폴더에 바로가기를 넣어두면 됩니다.
           </p>
 
-          <ol className="text-[11px] text-slate-300 space-y-1 list-decimal list-inside bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
+          <ol className="text-[13px] text-slate-300 space-y-1 list-decimal list-inside bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
             <li>키보드에서 <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-white font-mono">Win + R</kbd> 키를 누릅니다.</li>
             <li>실행 창에 <code className="text-blue-400">shell:startup</code> 입력 후 확인을 누릅니다.</li>
             <li>열린 폴더에 <code>NEWSchoolWidget_원클릭_실행.bat</code> 파일 또는 바로가기를 복사해 넣으면 끝!</li>
@@ -226,21 +226,21 @@ const GuideSection: React.FC = () => {
 
       {/* FAQ & Troubleshooting Accordion */}
       <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-4">
-        <h4 className="text-sm font-bold text-white flex items-center gap-2">
+        <h4 className="text-base font-bold text-white flex items-center gap-2">
           <HelpCircle className="w-4 h-4 text-blue-400" />
           <span>자주 묻는 질문 & 문제 해결 (FAQ)</span>
         </h4>
 
-        <div className="space-y-3 text-xs text-slate-300">
+        <div className="space-y-3 text-sm text-slate-300">
           <div className="p-3.5 rounded-xl bg-slate-800/50 border border-amber-500/30">
-            <div className="font-bold text-amber-300 mb-1 flex items-center gap-1.5 text-sm">
+            <div className="font-bold text-amber-300 mb-1 flex items-center gap-1.5 text-base">
               <span>⚠️ Q. .ps1 파일을 마우스 우클릭해서 실행했는데 아무것도 안 뜨거나 깜빡이고 닫혀요.</span>
             </div>
-            <div className="text-slate-300 leading-relaxed space-y-2 text-xs">
+            <div className="text-slate-300 leading-relaxed space-y-2 text-sm">
               <p>
                 윈도우의 기본 보안 정책(<code>ExecutionPolicy Restricted</code>) 때문에 파워쉘 스크립트 실행이 차단되어 창이 0.1초 만에 닫히는 현상입니다.
               </p>
-              <div className="p-2.5 rounded-lg bg-slate-950/70 border border-slate-700/60 space-y-2 text-[11px]">
+              <div className="p-2.5 rounded-lg bg-slate-950/70 border border-slate-700/60 space-y-2 text-[13px]">
                 <div>
                   <strong className="text-emerald-300">방법 1 (가장 추천): [올인원 .bat 다운로드]</strong><br />
                   상단의 <strong>[올인원 .bat 다운로드]</strong> 버튼으로 <code>NEWSchoolWidget_원클릭_실행.bat</code>을 받아 더블 클릭하세요. 윈도우 보안 정책을 자동으로 우회(Bypass)하여 즉시 위젯이 실행됩니다.
@@ -248,7 +248,7 @@ const GuideSection: React.FC = () => {
                 <div>
                   <strong className="text-blue-300">방법 2: PowerShell 창에서 1줄 명령어로 실행</strong><br />
                   키보드 <kbd className="px-1 py-0.5 rounded bg-slate-800 border border-slate-700 text-white font-mono">Win + R</kbd> ➔ <code className="text-blue-300">powershell</code> 입력 후 아래 명령어를 복사해 붙여넣고 엔터를 치면 즉시 켜집니다:
-                  <div className="mt-1 p-2 rounded bg-slate-900 font-mono text-[10px] text-blue-200 border border-slate-800 select-all break-all">
+                  <div className="mt-1 p-2 rounded bg-slate-900 font-mono text-[12px] text-blue-200 border border-slate-800 select-all break-all">
                     powershell -ExecutionPolicy Bypass -Sta -WindowStyle Hidden -File "$HOME\Downloads\NEWSchoolWidget.ps1"
                   </div>
                 </div>
@@ -264,7 +264,7 @@ const GuideSection: React.FC = () => {
               <p>
                 웹 브라우저에서 다운로드한 <code>.bat</code> 파일에 대해 윈도우 SmartScreen이 띄우는 기본 안내입니다:
               </p>
-              <div className="p-2 rounded-lg bg-slate-950/70 border border-slate-700/60 space-y-1 text-[11px]">
+              <div className="p-2 rounded-lg bg-slate-950/70 border border-slate-700/60 space-y-1 text-[13px]">
                 <div><strong>1. 파란색 경고 창에서:</strong> [추가 정보] 텍스트를 클릭한 뒤, 활성화되는 <strong>[실행]</strong> 버튼을 누릅니다.</div>
                 <div><strong>2. 파일 속성에서 영구 차단 해제:</strong> <code>NEWSchoolWidget_원클릭_실행.bat</code> 파일 마우스 우클릭 ➔ <strong>[속성]</strong> ➔ 맨 아래 <strong>[차단 해제(Unblock)]</strong> 체크박스 체크 후 <strong>[확인]</strong> 클릭!</div>
               </div>
@@ -364,8 +364,8 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ config }) => {
             <Terminal className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-xs font-bold text-slate-200">NEWSchoolWidget.ps1 (파워쉘 완성형 코드)</h3>
-            <p className="text-[10px] text-slate-400">설정하신 학교 정보와 시간표가 스크립트에 자동 반영되었습니다.</p>
+            <h3 className="text-sm font-bold text-slate-200">NEWSchoolWidget.ps1 (파워쉘 완성형 코드)</h3>
+            <p className="text-[12px] text-slate-400">설정하신 학교 정보와 시간표가 스크립트에 자동 반영되었습니다.</p>
           </div>
         </div>
 
@@ -373,7 +373,7 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ config }) => {
           <button
             type="button"
             onClick={handleCopyCode}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-sm font-bold flex items-center gap-1.5 transition-all ${
               copied
                 ? 'bg-emerald-600 text-white'
                 : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
@@ -386,7 +386,7 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ config }) => {
           <button
             type="button"
             onClick={handleDownloadPS1}
-            className="px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-1.5 transition-colors shadow-xs"
+            className="px-3 py-1.5 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-1.5 transition-colors shadow-xs"
           >
             <Download className="w-3.5 h-3.5" />
             <span>.ps1 다운로드</span>
@@ -395,7 +395,7 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ config }) => {
           <button
             type="button"
             onClick={handleDownloadBAT}
-            className="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-1.5 transition-colors"
+            className="px-3 py-1.5 rounded-xl text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-1.5 transition-colors"
             title="별도 파일 없이 더블 클릭으로 바로 켜지는 올인원 배치 파일"
           >
             <Play className="w-3.5 h-3.5" />
@@ -405,7 +405,7 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ config }) => {
           <button
             type="button"
             onClick={() => setShowTroubleshoot(true)}
-            className="px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1.5 transition-colors"
+            className="px-2.5 py-1.5 rounded-xl text-sm font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1.5 transition-colors"
             title="실행 에러 / SmartScreen 해결법"
           >
             <HelpCircle className="w-3.5 h-3.5" />
@@ -415,7 +415,7 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ config }) => {
       </div>
 
       {/* Standalone Notice Banner */}
-      <div className="px-4 py-2 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between text-xs text-slate-300">
+      <div className="px-4 py-2 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between text-sm text-slate-300">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           <span>
@@ -425,21 +425,21 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ config }) => {
         <button
           type="button"
           onClick={() => setShowTroubleshoot(true)}
-          className="text-[11px] text-amber-400 hover:text-amber-300 underline underline-offset-2 shrink-0 ml-2"
+          className="text-[13px] text-amber-400 hover:text-amber-300 underline underline-offset-2 shrink-0 ml-2"
         >
           '실행할 수 없는 앱' 알림이 뜨나요?
         </button>
       </div>
 
       {/* Code Text Body */}
-      <div className="flex-1 p-4 overflow-y-auto font-mono text-xs text-slate-300 bg-slate-950/60 leading-relaxed">
+      <div className="flex-1 p-4 overflow-y-auto font-mono text-sm text-slate-300 bg-slate-950/60 leading-relaxed">
         <pre className="select-text whitespace-pre-wrap break-all">
           {scriptContent}
         </pre>
       </div>
 
       {/* Code Footer info */}
-      <div className="p-3 bg-slate-950/90 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
+      <div className="p-3 bg-slate-950/90 border-t border-slate-800 flex items-center justify-between text-[13px] text-slate-400">
         <div className="flex items-center gap-1.5">
           <ShieldCheck className="w-4 h-4 text-emerald-400" />
           <span>WPF XAML Native 렌더링 • 듀얼 모니터 우측 상단 자동 스냅 내장</span>
@@ -452,7 +452,7 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ config }) => {
         <div className="absolute inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full max-h-[90%] overflow-y-auto shadow-2xl p-5 text-slate-200 space-y-4">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2 text-amber-400 font-bold text-sm">
+              <div className="flex items-center gap-2 text-amber-400 font-bold text-base">
                 <AlertTriangle className="w-5 h-5" />
                 <span>윈도우에서 실행할 수 없다고 뜰 때 해결법</span>
               </div>
@@ -465,11 +465,11 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ config }) => {
               </button>
             </div>
 
-            <div className="space-y-3.5 text-xs text-slate-300">
+            <div className="space-y-3.5 text-sm text-slate-300">
               {/* Solution 1: SmartScreen */}
               <div className="p-3.5 rounded-xl bg-slate-950/80 border border-blue-500/30 space-y-2">
                 <div className="font-bold text-blue-300 flex items-center gap-1.5">
-                  <span className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px]">1</span>
+                  <span className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[12px]">1</span>
                   <span>'Windows의 PC 보호' (SmartScreen) 파란 창이 뜰 때</span>
                 </div>
                 <p className="text-slate-300 leading-relaxed pl-6">
@@ -484,7 +484,7 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ config }) => {
               {/* Solution 2: File Properties Unblock */}
               <div className="p-3.5 rounded-xl bg-slate-950/80 border border-emerald-500/30 space-y-2">
                 <div className="font-bold text-emerald-300 flex items-center gap-1.5">
-                  <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px]">2</span>
+                  <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[12px]">2</span>
                   <span>파일 속성에서 '차단 해제'하기 (가장 깔끔한 방법)</span>
                 </div>
                 <ol className="ml-6 list-decimal list-inside space-y-1 text-slate-300">
@@ -497,7 +497,7 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ config }) => {
               {/* Solution 3: ExecutionPolicy in PowerShell */}
               <div className="p-3.5 rounded-xl bg-slate-950/80 border border-purple-500/30 space-y-2">
                 <div className="font-bold text-purple-300 flex items-center gap-1.5">
-                  <span className="w-5 h-5 rounded-full bg-purple-600 text-white flex items-center justify-center text-[10px]">3</span>
+                  <span className="w-5 h-5 rounded-full bg-purple-600 text-white flex items-center justify-center text-[12px]">3</span>
                   <span>.ps1 파일로 우클릭 실행하기 (대체 방법)</span>
                 </div>
                 <p className="text-slate-300 leading-relaxed pl-6">
@@ -510,7 +510,7 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ config }) => {
               <button
                 type="button"
                 onClick={() => setShowTroubleshoot(false)}
-                className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-colors"
+                className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold transition-colors"
               >
                 확인했습니다
               </button>
@@ -595,11 +595,11 @@ export default function App() {
                 <h1 className="text-base sm:text-lg font-bold tracking-tight text-white">
                   학교 생활 윈도우 위젯 스튜디오
                 </h1>
-                <span className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[11px] font-semibold">
+                <span className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[13px] font-semibold">
                   PowerShell + WPF
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-sm text-slate-400">
                 바탕화면 우측 상단 자동 스냅 • 나이스 실시간 급식(13:30 전환) • 시간표 • D-Day • 할 일 관리
               </p>
             </div>
@@ -610,7 +610,7 @@ export default function App() {
             <button
               type="button"
               onClick={handleQuickCopy}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
+              className={`px-3 py-1.5 rounded-xl text-sm font-bold flex items-center gap-1.5 transition-all ${
                 quickCopied
                   ? 'bg-emerald-600 text-white'
                   : 'bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700'
@@ -623,7 +623,7 @@ export default function App() {
             <button
               type="button"
               onClick={handleDownloadPS1}
-              className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-1.5 transition-all shadow-md shadow-blue-600/20"
+              className="px-3.5 py-1.5 rounded-xl text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-1.5 transition-all shadow-md shadow-blue-600/20"
             >
               <Download className="w-3.5 h-3.5" />
               <span>.ps1 다운로드</span>
@@ -632,7 +632,7 @@ export default function App() {
             <button
               type="button"
               onClick={handleDownloadBAT}
-              className="hidden sm:flex px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white items-center gap-1.5 transition-all"
+              className="hidden sm:flex px-3 py-1.5 rounded-xl text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-white items-center gap-1.5 transition-all"
               title="검은 콘솔창 없이 즉시 띄우는 배치파일"
             >
               <Play className="w-3.5 h-3.5" />
@@ -649,7 +649,7 @@ export default function App() {
           <button
             type="button"
             onClick={() => setActiveTab('simulator')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all shrink-0 ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm sm:text-base font-bold transition-all shrink-0 ${
               activeTab === 'simulator'
                 ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
@@ -662,7 +662,7 @@ export default function App() {
           <button
             type="button"
             onClick={() => setActiveTab('config')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all shrink-0 ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm sm:text-base font-bold transition-all shrink-0 ${
               activeTab === 'config'
                 ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
@@ -675,7 +675,7 @@ export default function App() {
           <button
             type="button"
             onClick={() => setActiveTab('code')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all shrink-0 ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm sm:text-base font-bold transition-all shrink-0 ${
               activeTab === 'code'
                 ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
@@ -688,7 +688,7 @@ export default function App() {
           <button
             type="button"
             onClick={() => setActiveTab('guide')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all shrink-0 ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm sm:text-base font-bold transition-all shrink-0 ${
               activeTab === 'guide'
                 ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
@@ -714,12 +714,12 @@ export default function App() {
             <div className="space-y-4">
               {/* Quick Info Card */}
               <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
-                <h3 className="text-xs font-bold text-slate-300 flex items-center gap-2">
+                <h3 className="text-sm font-bold text-slate-300 flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-blue-400" />
                   <span>위젯 핵심 동작 특성</span>
                 </h3>
 
-                <ul className="text-xs text-slate-300 space-y-2 leading-relaxed">
+                <ul className="text-sm text-slate-300 space-y-2 leading-relaxed">
                   <li className="flex items-start gap-2">
                     <span className="text-blue-400 font-bold">•</span>
                     <span><strong>마우스 드래그 & 자동 스냅:</strong> 위젯을 자유롭게 끌다가 손을 놓으면 현재 모니터 우측 상단으로 부드럽게 붙습니다.</span>
@@ -738,7 +738,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => setActiveTab('config')}
-                    className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl transition-colors"
+                    className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-bold rounded-xl transition-colors"
                   >
                     학교 및 시간표 변경하기 ➔
                   </button>
@@ -766,7 +766,7 @@ export default function App() {
 
             {/* Live Preview of the widget */}
             <div className="flex flex-col items-center justify-start space-y-3">
-              <div className="text-xs font-bold text-slate-400">위젯 실시간 미리보기</div>
+              <div className="text-sm font-bold text-slate-400">위젯 실시간 미리보기</div>
               <SchoolWidgetCard
                 config={config}
                 onUpdateConfig={setConfig}
@@ -789,7 +789,7 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-slate-950 py-4 px-4 text-center text-xs text-slate-500">
+      <footer className="border-t border-slate-800/80 bg-slate-950 py-4 px-4 text-center text-sm text-slate-500">
         <p>
           학교 생활 윈도우 위젯 • 나이스(NEIS) Open API 연동 • WPF XAML & PowerShell Script Generator
         </p>
