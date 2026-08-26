@@ -580,10 +580,44 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
               />
             </div>
 
+            {/* Snap Side */}
+            <div>
+              <label className={`block ${sz('text-base','text-xs')} font-semibold text-slate-300 mb-2`}>
+                자동 스냅 위치
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => onUpdateConfig({ ...config, snapSide: 'left' })}
+                  className={`py-2 rounded-xl border ${sz('text-base','text-xs')} font-bold transition-all ${
+                    config.snapSide === 'left'
+                      ? 'bg-blue-600/20 border-blue-500 text-white'
+                      : 'bg-slate-800 border-slate-700 hover:border-slate-600 text-slate-300'
+                  }`}
+                >
+                  ⬉ 왼쪽 상단
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onUpdateConfig({ ...config, snapSide: 'right' })}
+                  className={`py-2 rounded-xl border ${sz('text-base','text-xs')} font-bold transition-all ${
+                    config.snapSide === 'right' || !config.snapSide
+                      ? 'bg-blue-600/20 border-blue-500 text-white'
+                      : 'bg-slate-800 border-slate-700 hover:border-slate-600 text-slate-300'
+                  }`}
+                >
+                  ⬈ 오른쪽 상단
+                </button>
+              </div>
+              <span className={`${sz('text-[13px]','text-[10px]')} text-slate-400 mt-1 block`}>
+                위젯을 드래그하다 손을 떼면 화면 이쪽 방향 상단으로 자동으로 달라붙습니다.
+              </span>
+            </div>
+
             {/* Snap Margin */}
             <div>
               <div className={`flex justify-between ${sz('text-base','text-xs')} font-semibold text-slate-300 mb-1`}>
-                <span>우측 상단 자동 스냅 여백 (Margin)</span>
+                <span>{config.snapSide === 'left' ? '좌측' : '우측'} 상단 자동 스냅 여백 (Margin)</span>
                 <span className="text-blue-400">{config.snapMargin}px</span>
               </div>
               <input
@@ -596,7 +630,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                 className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
               />
               <span className={`${sz('text-[13px]','text-[10px]')} text-slate-400 mt-1 block`}>
-                위젯을 마우스로 옮기다가 손을 떼면 화면 우측 상단에 자동으로 달라붙는데, 그때 화면 가장자리와 위젯 사이에 남길 여백 간격입니다.
+                위젯을 마우스로 옮기다가 손을 떼면 화면 {config.snapSide === 'left' ? '좌측' : '우측'} 상단에 자동으로 달라붙는데, 그때 화면 가장자리와 위젯 사이에 남길 여백 간격입니다.
                 <br />
                 0px이면 화면 끝에 딱 붙고, 값을 높이면 그만큼 안쪽으로 떨어져서 붙습니다.
               </span>

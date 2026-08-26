@@ -66,6 +66,7 @@ const DEFAULT_CONFIG: WidgetConfig = {
   theme: 'dark-acrylic',
   opacity: 1.0,
   alwaysOnTop: true,
+  snapSide: 'right',
   snapMargin: 0,
   mealSwitchTime: '13:30',
   showAllergies: true,
@@ -138,7 +139,7 @@ const GuideSection: React.FC = () => {
 
           <div className="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/20 text-[13px] text-emerald-300 flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 shrink-0" />
-            <span>실행 즉시 모니터 우측 상단에 투명 아크릴 위젯이 깔끔하게 부착됩니다!</span>
+            <span>실행 즉시 모니터 상단, 스튜디오에서 설정하신 좌/우 위치에 투명 아크릴 위젯이 깔끔하게 부착됩니다!</span>
           </div>
         </div>
 
@@ -448,7 +449,7 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ config }) => {
       <div className="p-3 bg-slate-950/90 border-t border-slate-800 flex items-center justify-between text-[13px] text-slate-400">
         <div className="flex items-center gap-1.5">
           <ShieldCheck className="w-4 h-4 text-emerald-400" />
-          <span>WPF XAML Native 렌더링 • 듀얼 모니터 우측 상단 자동 스냅 내장</span>
+          <span>WPF XAML Native 렌더링 • 듀얼 모니터 {config.snapSide === 'left' ? '좌측' : '우측'} 상단 자동 스냅 내장</span>
         </div>
         <span className="text-slate-500">인코딩: UTF-8 with BOM (한글 깨짐 방지 완벽)</span>
       </div>
@@ -606,7 +607,7 @@ export default function App() {
                 </span>
               </div>
               <p className="text-sm text-slate-400">
-                바탕화면 우측 상단 자동 스냅 • 나이스 실시간 급식(13:30 전환) • 시간표 • D-Day • 할 일 관리
+                바탕화면 {config.snapSide === 'left' ? '좌측' : '우측'} 상단 자동 스냅 • 나이스 실시간 급식(13:30 전환) • 시간표 • D-Day • 할 일 관리
               </p>
             </div>
           </div>
@@ -728,7 +729,7 @@ export default function App() {
                 <ul className="text-sm text-slate-300 space-y-2 leading-relaxed">
                   <li className="flex items-start gap-2">
                     <span className="text-blue-400 font-bold">•</span>
-                    <span><strong>마우스 드래그 & 자동 스냅:</strong> 위젯을 자유롭게 끌다가 손을 놓으면 현재 모니터 우측 상단으로 부드럽게 붙습니다.</span>
+                    <span><strong>마우스 드래그 & 자동 스냅:</strong> 위젯을 자유롭게 끌다가 손을 놓으면 현재 모니터 {config.snapSide === 'left' ? '좌측' : '우측'} 상단으로 부드럽게 붙습니다.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-400 font-bold">•</span>

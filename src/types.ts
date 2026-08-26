@@ -42,7 +42,8 @@ export interface WidgetConfig {
   theme: WidgetTheme;
   opacity: number; // 0.6 ~ 1.0
   alwaysOnTop: boolean;
-  snapMargin: number; // px from top and right
+  snapSide: 'left' | 'right'; // 화면 어느 쪽 상단에 자동으로 붙을지
+  snapMargin: number; // px from top and the chosen side
   mealSwitchTime: string; // "13:30"
   showAllergies: boolean;
   showCalories: boolean;

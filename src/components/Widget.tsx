@@ -276,7 +276,7 @@ export const SchoolWidgetCard: React.FC<SchoolWidgetCardProps> = ({
 
         <div className="flex items-center gap-1 text-slate-400">
           <div
-            title="마우스로 잡고 이동 (손을 떼면 우측 상단 자동 고정)"
+            title={`마우스로 잡고 이동 (손을 떼면 ${config.snapSide === 'left' ? '좌측' : '우측'} 상단 자동 고정)`}
             className="p-1 rounded hover:bg-white/10 hover:text-white transition-colors"
           >
             <Move className="w-3.5 h-3.5" />
@@ -552,22 +552,24 @@ export const DesktopSimulator: React.FC<DesktopSimulatorProps> = ({
   const [activeMonitor, setActiveMonitor] = useState<1 | 2>(1);
   const [snappedMessage, setSnappedMessage] = useState<string | null>(null);
 
-  // Initialize position to top-right on mount or container resize
+  // Initialize position to top-left or top-right on mount or container resize,
+  // depending on config.snapSide
   const snapToTopRight = (monitorIndex: 1 | 2 = activeMonitor) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const margin = config.snapMargin || 20;
     const widgetWidth = config.widgetWidth || 330;
+    const isLeft = config.snapSide === 'left';
 
-    let targetX = rect.width - widgetWidth - margin;
+    let targetX = isLeft ? margin : rect.width - widgetWidth - margin;
     if (dualMonitor) {
       const halfWidth = rect.width / 2;
       if (monitorIndex === 1) {
-        // First monitor top-right
-        targetX = halfWidth - widgetWidth - margin;
+        // First monitor (left half)
+        targetX = isLeft ? margin : halfWidth - widgetWidth - margin;
       } else {
-        // Second monitor top-right
-        targetX = rect.width - widgetWidth - margin;
+        // Second monitor (right half)
+        targetX = isLeft ? halfWidth + margin : rect.width - widgetWidth - margin;
       }
     }
 
@@ -576,13 +578,13 @@ export const DesktopSimulator: React.FC<DesktopSimulatorProps> = ({
       y: margin,
     });
 
-    setSnappedMessage(`모니터 ${monitorIndex} 우측 상단으로 자동 스냅되었습니다!`);
+    setSnappedMessage(`모니터 ${monitorIndex} ${isLeft ? '좌측' : '우측'} 상단으로 자동 스냅되었습니다!`);
     setTimeout(() => setSnappedMessage(null), 2500);
   };
 
   useEffect(() => {
     snapToTopRight(activeMonitor);
-  }, [dualMonitor, config.snapMargin, config.widgetWidth]);
+  }, [dualMonitor, config.snapMargin, config.snapSide, config.widgetWidth]);
 
   // Drag handlers
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -649,7 +651,7 @@ export const DesktopSimulator: React.FC<DesktopSimulatorProps> = ({
             윈도우 바탕화면 실시간 시뮬레이터
           </span>
           <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[11px]">
-            드래그 후 손을 떼면 우측 상단 자동 스냅
+            드래그 후 손을 떼면 {config.snapSide === 'left' ? '좌측' : '우측'} 상단 자동 스냅
           </span>
         </div>
 
