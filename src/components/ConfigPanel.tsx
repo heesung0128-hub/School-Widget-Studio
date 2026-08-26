@@ -28,12 +28,18 @@ import {
 interface ConfigPanelProps {
   config: WidgetConfig;
   onUpdateConfig: (newConfig: WidgetConfig) => void;
+  // Simulator 탭 사이드바에 끼워 넣는 미니 패널용 - true면 원래의 작은 글씨 크기를 쓰고,
+  // false(기본값, "위젯 커스텀 설정" 탭 전용)면 잘 읽히도록 키운 글씨 크기를 씀
+  compact?: boolean;
 }
 
 export const ConfigPanel: React.FC<ConfigPanelProps> = ({
   config,
   onUpdateConfig,
+  compact = false,
 }) => {
+  // large: 위젯 커스텀 설정 탭에서 쓰는 확대 크기 / small: 시뮬레이터 미니 패널의 원래 크기
+  const sz = (large: string, small: string) => (compact ? small : large);
   const [activeTab, setActiveTab] = useState<'school' | 'ddays' | 'timetable' | 'style'>('school');
   
   // School search state
@@ -171,7 +177,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
         <button
           type="button"
           onClick={() => setActiveTab('school')}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-base font-semibold transition-colors shrink-0 ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${sz('text-base','text-xs')} font-semibold transition-colors shrink-0 ${
             activeTab === 'school'
               ? 'bg-blue-600 text-white'
               : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
@@ -184,7 +190,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
         <button
           type="button"
           onClick={() => setActiveTab('ddays')}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-base font-semibold transition-colors shrink-0 ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${sz('text-base','text-xs')} font-semibold transition-colors shrink-0 ${
             activeTab === 'ddays'
               ? 'bg-blue-600 text-white'
               : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
@@ -197,7 +203,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
         <button
           type="button"
           onClick={() => setActiveTab('timetable')}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-base font-semibold transition-colors shrink-0 ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${sz('text-base','text-xs')} font-semibold transition-colors shrink-0 ${
             activeTab === 'timetable'
               ? 'bg-blue-600 text-white'
               : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
@@ -210,7 +216,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
         <button
           type="button"
           onClick={() => setActiveTab('style')}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-base font-semibold transition-colors shrink-0 ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${sz('text-base','text-xs')} font-semibold transition-colors shrink-0 ${
             activeTab === 'style'
               ? 'bg-blue-600 text-white'
               : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
@@ -228,13 +234,13 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
           <div className="space-y-4">
             {/* Current Selected School */}
             <div className="p-3 bg-slate-800/60 rounded-xl border border-slate-700/70">
-              <div className="text-base text-slate-400 mb-1">현재 적용된 학교</div>
+              <div className={`${sz('text-base','text-xs')} text-slate-400 mb-1`}>현재 적용된 학교</div>
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="text-lg font-bold text-blue-400">{config.school.schoolName}</h4>
-                  <p className="text-base text-slate-400 mt-0.5">{config.school.officeName} ({config.school.officeCode}) • 코드: {config.school.schoolCode}</p>
+                  <h4 className={`${sz('text-lg','text-sm')} font-bold text-blue-400`}>{config.school.schoolName}</h4>
+                  <p className={`${sz('text-base','text-xs')} text-slate-400 mt-0.5`}>{config.school.officeName} ({config.school.officeCode}) • 코드: {config.school.schoolCode}</p>
                 </div>
-                <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[14px]">
+                <span className={`px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 ${sz('text-[14px]','text-[11px]')}`}>
                   NEIS 연동 활성화
                 </span>
               </div>
@@ -242,7 +248,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
 
             {/* NEIS School Search Input */}
             <form onSubmit={handleSearchSchool} className="space-y-2">
-              <label className="block text-base font-semibold text-slate-300">
+              <label className={`block ${sz('text-base','text-xs')} font-semibold text-slate-300`}>
                 🔍 나이스(NEIS) 학교 검색
               </label>
               <div className="flex gap-2">
@@ -251,12 +257,12 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                   value={searchKeyword}
                   onChange={(e) => setSearchKeyword(e.target.value)}
                   placeholder="예: 서울고등학교, 대전중학교..."
-                  className="flex-1 px-3 py-2 text-base rounded-xl bg-slate-800 border border-slate-700 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500"
+                  className={`flex-1 px-3 py-2 ${sz('text-base','text-xs')} rounded-xl bg-slate-800 border border-slate-700 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500`}
                 />
                 <button
                   type="submit"
                   disabled={isSearching}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-base font-bold rounded-xl flex items-center gap-1.5 transition-colors"
+                  className={`px-4 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white ${sz('text-base','text-xs')} font-bold rounded-xl flex items-center gap-1.5 transition-colors`}
                 >
                   <Search className="w-3.5 h-3.5" />
                   <span>{isSearching ? '검색 중...' : '검색'}</span>
@@ -265,13 +271,13 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
             </form>
 
             {searchMessage && (
-              <p className="text-base text-amber-400">{searchMessage}</p>
+              <p className={`${sz('text-base','text-xs')} text-amber-400`}>{searchMessage}</p>
             )}
 
             {/* Search Results List */}
             {searchResults.length > 0 && (
               <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
-                <div className="text-base text-slate-400">검색 결과 ({searchResults.length}건):</div>
+                <div className={`${sz('text-base','text-xs')} text-slate-400`}>검색 결과 ({searchResults.length}건):</div>
                 {searchResults.map((sch) => (
                   <button
                     key={sch.schoolCode}
@@ -280,14 +286,14 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                     className="w-full text-left p-2.5 rounded-xl bg-slate-800/80 hover:bg-blue-900/40 border border-slate-700 hover:border-blue-500/50 transition-all flex items-center justify-between group"
                   >
                     <div>
-                      <div className="text-base font-bold text-slate-200 group-hover:text-blue-300">
+                      <div className={`${sz('text-base','text-xs')} font-bold text-slate-200 group-hover:text-blue-300`}>
                         {sch.schoolName}
                       </div>
-                      <div className="text-[14px] text-slate-400">
+                      <div className={`${sz('text-[14px]','text-[11px]')} text-slate-400`}>
                         {sch.officeName} • {sch.location || '위치 정보 없음'}
                       </div>
                     </div>
-                    <span className="text-base text-blue-400 group-hover:underline">선택하기</span>
+                    <span className={`${sz('text-base','text-xs')} text-blue-400 group-hover:underline`}>선택하기</span>
                   </button>
                 ))}
               </div>
@@ -295,29 +301,29 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
 
             {/* Meal Time Switch & Options */}
             <div className="pt-2 border-t border-slate-800 space-y-3">
-              <h4 className="text-base font-bold text-slate-300 flex items-center gap-1.5">
+              <h4 className={`${sz('text-base','text-xs')} font-bold text-slate-300 flex items-center gap-1.5`}>
                 <Utensils className="w-3.5 h-3.5 text-emerald-400" />
                 급식 시간 자동 전환 규칙 (13:30 기준)
               </h4>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[14px] text-slate-400 mb-1">
+                  <label className={`block ${sz('text-[14px]','text-[11px]')} text-slate-400 mb-1`}>
                     내일 급식 전환 기준 시각
                   </label>
                   <input
                     type="time"
                     value={config.mealSwitchTime}
                     onChange={(e) => onUpdateConfig({ ...config, mealSwitchTime: e.target.value })}
-                    className="w-full px-3 py-1.5 text-base rounded-lg bg-slate-800 border border-slate-700 text-white focus:outline-none focus:border-blue-500"
+                    className={`w-full px-3 py-1.5 ${sz('text-base','text-xs')} rounded-lg bg-slate-800 border border-slate-700 text-white focus:outline-none focus:border-blue-500`}
                   />
-                  <span className="text-[13px] text-slate-400 mt-1 block">
+                  <span className={`${sz('text-[13px]','text-[10px]')} text-slate-400 mt-1 block`}>
                     설정한 시간 이후에는 자동으로 '내일의 급식'(금요일은 월요일)이 표시됩니다.
                   </span>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="flex items-center gap-2 cursor-pointer text-base text-slate-300">
+                  <label className={`flex items-center gap-2 cursor-pointer ${sz('text-base','text-xs')} text-slate-300`}>
                     <input
                       type="checkbox"
                       checked={config.showAllergies}
@@ -327,7 +333,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                     <span>알레르기 유발물질 번호 표시</span>
                   </label>
 
-                  <label className="flex items-center gap-2 cursor-pointer text-base text-slate-300">
+                  <label className={`flex items-center gap-2 cursor-pointer ${sz('text-base','text-xs')} text-slate-300`}>
                     <input
                       type="checkbox"
                       checked={config.showCalories}
@@ -347,25 +353,25 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
           <div className="space-y-4">
             {/* Add D-Day form */}
             <form onSubmit={handleAddDDay} className="p-3 bg-slate-800/60 rounded-xl border border-slate-700/60 space-y-2">
-              <div className="text-base font-bold text-slate-300">새 D-Day 추가</div>
+              <div className={`${sz('text-base','text-xs')} font-bold text-slate-300`}>새 D-Day 추가</div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <input
                   type="text"
                   value={newDDayTitle}
                   onChange={(e) => setNewDDayTitle(e.target.value)}
                   placeholder="예: 1학기 중간고사, 여름방학, 수능..."
-                  className="px-3 py-1.5 text-base rounded-lg bg-slate-800 border border-slate-700 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500"
+                  className={`px-3 py-1.5 ${sz('text-base','text-xs')} rounded-lg bg-slate-800 border border-slate-700 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500`}
                 />
                 <input
                   type="date"
                   value={newDDayDate}
                   onChange={(e) => setNewDDayDate(e.target.value)}
-                  className="px-3 py-1.5 text-base rounded-lg bg-slate-800 border border-slate-700 text-white focus:outline-none focus:border-blue-500"
+                  className={`px-3 py-1.5 ${sz('text-base','text-xs')} rounded-lg bg-slate-800 border border-slate-700 text-white focus:outline-none focus:border-blue-500`}
                 />
               </div>
               <button
                 type="submit"
-                className="w-full py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-base font-bold rounded-lg flex items-center justify-center gap-1.5 transition-colors"
+                className={`w-full py-1.5 bg-blue-600 hover:bg-blue-500 text-white ${sz('text-base','text-xs')} font-bold rounded-lg flex items-center justify-center gap-1.5 transition-colors`}
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>D-Day 등록</span>
@@ -374,12 +380,12 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
 
             {/* Existing D-Days */}
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-base text-slate-400">
+              <div className={`flex items-center justify-between ${sz('text-base','text-xs')} text-slate-400`}>
                 <span>등록된 D-Day 목록 ({config.ddays.length}개):</span>
-                <span className="text-[14px] text-slate-500">화살표(↑↓)로 위젯 표시 순서 변경</span>
+                <span className={`${sz('text-[14px]','text-[11px]')} text-slate-500`}>화살표(↑↓)로 위젯 표시 순서 변경</span>
               </div>
               {config.ddays.length === 0 ? (
-                <p className="text-base text-slate-500 py-3 text-center">등록된 D-Day가 없습니다.</p>
+                <p className={`${sz('text-base','text-xs')} text-slate-500 py-3 text-center`}>등록된 D-Day가 없습니다.</p>
               ) : (
                 config.ddays.map((d, idx) => (
                   <div
@@ -387,12 +393,12 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                     className="p-2.5 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-between gap-2 hover:border-slate-600 transition-colors"
                   >
                     <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <div className="w-5 h-5 rounded-md bg-slate-700/60 flex items-center justify-center text-[13px] font-bold text-slate-400 shrink-0">
+                      <div className={`w-5 h-5 rounded-md bg-slate-700/60 flex items-center justify-center ${sz('text-[13px]','text-[10px]')} font-bold text-slate-400 shrink-0`}>
                         {idx + 1}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="text-base font-bold text-slate-200 truncate">{d.title}</div>
-                        <div className="text-[14px] text-slate-400">목표일: {d.targetDate}</div>
+                        <div className={`${sz('text-base','text-xs')} font-bold text-slate-200 truncate`}>{d.title}</div>
+                        <div className={`${sz('text-[14px]','text-[11px]')} text-slate-400`}>목표일: {d.targetDate}</div>
                       </div>
                     </div>
 
@@ -441,26 +447,26 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
           <div className="space-y-4">
             {/* Presets */}
             <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-slate-800/60 rounded-xl border border-slate-700/60">
-              <span className="text-base font-semibold text-slate-300">시간표 빠른 프리셋:</span>
+              <span className={`${sz('text-base','text-xs')} font-semibold text-slate-300`}>시간표 빠른 프리셋:</span>
               <div className="flex gap-1.5">
                 <button
                   type="button"
                   onClick={() => applyTimetablePreset('high-teacher')}
-                  className="px-2 py-1 text-[14px] bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-md font-medium transition-colors"
+                  className={`px-2 py-1 ${sz('text-[14px]','text-[11px]')} bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-md font-medium transition-colors`}
                 >
                   고교 교사용
                 </button>
                 <button
                   type="button"
                   onClick={() => applyTimetablePreset('middle-teacher')}
-                  className="px-2 py-1 text-[14px] bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-md font-medium transition-colors"
+                  className={`px-2 py-1 ${sz('text-[14px]','text-[11px]')} bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-md font-medium transition-colors`}
                 >
                   중학교 교사용
                 </button>
                 <button
                   type="button"
                   onClick={() => applyTimetablePreset('elem-student')}
-                  className="px-2 py-1 text-[14px] bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-md font-medium transition-colors"
+                  className={`px-2 py-1 ${sz('text-[14px]','text-[11px]')} bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-md font-medium transition-colors`}
                 >
                   초/중 학생용
                 </button>
@@ -476,11 +482,11 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                 };
                 return (
                   <div key={day} className="p-2.5 bg-slate-800/80 rounded-xl border border-slate-700">
-                    <div className="text-base font-bold text-blue-400 mb-2">{day}요일 시간표</div>
+                    <div className={`${sz('text-base','text-xs')} font-bold text-blue-400 mb-2`}>{day}요일 시간표</div>
                     <div className="grid grid-cols-7 gap-1">
                       {dayObj.periods.map((subject, pIdx) => (
                         <div key={pIdx} className="space-y-1">
-                          <label className="text-[13px] text-slate-400 block text-center">
+                          <label className={`${sz('text-[13px]','text-[10px]')} text-slate-400 block text-center`}>
                             {pIdx + 1}교시
                           </label>
                           <input
@@ -488,7 +494,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                             value={subject}
                             onChange={(e) => handleTimetableChange(day, pIdx, e.target.value)}
                             placeholder="-"
-                            className="w-full px-1 py-1 text-[14px] text-center rounded bg-slate-900 border border-slate-700 text-slate-200 focus:outline-none focus:border-blue-500"
+                            className={`w-full px-1 py-1 ${sz('text-[14px]','text-[11px]')} text-center rounded bg-slate-900 border border-slate-700 text-slate-200 focus:outline-none focus:border-blue-500`}
                           />
                         </div>
                       ))}
@@ -505,7 +511,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
           <div className="space-y-4">
             {/* Themes */}
             <div>
-              <label className="block text-base font-semibold text-slate-300 mb-2">
+              <label className={`block ${sz('text-base','text-xs')} font-semibold text-slate-300 mb-2`}>
                 🎨 위젯 테마 선택
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -527,11 +533,11 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                         : 'bg-slate-800 border-slate-700 hover:border-slate-600 text-slate-300'
                     }`}
                   >
-                    <div className="text-base font-bold flex items-center justify-between">
+                    <div className={`${sz('text-base','text-xs')} font-bold flex items-center justify-between`}>
                       <span>{th.name}</span>
                       {config.theme === th.id && <Check className="w-3.5 h-3.5 text-blue-400" />}
                     </div>
-                    <div className="text-[13px] text-slate-400 mt-0.5">{th.desc}</div>
+                    <div className={`${sz('text-[13px]','text-[10px]')} text-slate-400 mt-0.5`}>{th.desc}</div>
                   </button>
                 ))}
               </div>
@@ -539,7 +545,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
 
             {/* Font Scale slider */}
             <div>
-              <div className="flex justify-between text-base font-semibold text-slate-300 mb-1">
+              <div className={`flex justify-between ${sz('text-base','text-xs')} font-semibold text-slate-300 mb-1`}>
                 <span>글씨 크기</span>
                 <span className="text-blue-400">{Math.round((config.fontScale ?? 1) * 100)}%</span>
               </div>
@@ -552,14 +558,14 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                 onChange={(e) => onUpdateConfig({ ...config, fontScale: parseFloat(e.target.value) })}
                 className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
               />
-              <span className="text-[13px] text-slate-400 mt-1 block">
+              <span className={`${sz('text-[13px]','text-[10px]')} text-slate-400 mt-1 block`}>
                 위젯 전체 글씨와 요소 크기가 이 비율만큼 함께 커지거나 작아집니다.
               </span>
             </div>
 
             {/* Opacity slider */}
             <div>
-              <div className="flex justify-between text-base font-semibold text-slate-300 mb-1">
+              <div className={`flex justify-between ${sz('text-base','text-xs')} font-semibold text-slate-300 mb-1`}>
                 <span>위젯 투명도 (Opacity)</span>
                 <span className="text-blue-400">{Math.round(config.opacity * 100)}%</span>
               </div>
@@ -576,7 +582,7 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
 
             {/* Snap Margin */}
             <div>
-              <div className="flex justify-between text-base font-semibold text-slate-300 mb-1">
+              <div className={`flex justify-between ${sz('text-base','text-xs')} font-semibold text-slate-300 mb-1`}>
                 <span>우측 상단 자동 스냅 여백 (Margin)</span>
                 <span className="text-blue-400">{config.snapMargin}px</span>
               </div>
@@ -589,16 +595,18 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                 onChange={(e) => onUpdateConfig({ ...config, snapMargin: parseInt(e.target.value) })}
                 className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
               />
-              <span className="text-[13px] text-slate-400 mt-1 block">
-                위젯을 마우스로 옮기다가 손을 떼면 화면 우측 상단에 자동으로 달라붙는데, 그때 화면 가장자리와 위젯 사이에 남길 여백 간격입니다. 0px이면 화면 끝에 딱 붙고, 값을 높이면 그만큼 안쪽으로 떨어져서 붙습니다.
+              <span className={`${sz('text-[13px]','text-[10px]')} text-slate-400 mt-1 block`}>
+                위젯을 마우스로 옮기다가 손을 떼면 화면 우측 상단에 자동으로 달라붙는데, 그때 화면 가장자리와 위젯 사이에 남길 여백 간격입니다.
+                <br />
+                0px이면 화면 끝에 딱 붙고, 값을 높이면 그만큼 안쪽으로 떨어져서 붙습니다.
               </span>
             </div>
 
             {/* Toggle Always On Top */}
             <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
               <div>
-                <div className="text-base font-bold text-slate-200">항상 위에 표시 (Topmost)</div>
-                <div className="text-[14px] text-slate-400">다른 작업 창 위에 위젯을 항상 고정합니다.</div>
+                <div className={`${sz('text-base','text-xs')} font-bold text-slate-200`}>항상 위에 표시 (Topmost)</div>
+                <div className={`${sz('text-[14px]','text-[11px]')} text-slate-400`}>다른 작업 창 위에 위젯을 항상 고정합니다.</div>
               </div>
               <input
                 type="checkbox"

@@ -110,65 +110,7 @@ const GuideSection: React.FC = () => {
               <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-sm flex items-center justify-center">
                 1
               </span>
-              <h4 className="text-base font-bold text-white">스크립트 파일 다운로드</h4>
-            </div>
-            <span className="text-[13px] text-blue-400 font-medium">초간단</span>
-          </div>
-
-          <p className="text-sm text-slate-300 leading-relaxed">
-            상단의 <strong>[.ps1 다운로드]</strong> 버튼을 눌러 <code>NEWSchoolWidget.ps1</code> 파일을 원하는 폴더(예: 바탕화면이나 내 문서)에 저장합니다.
-          </p>
-
-          <div className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-[13px] text-slate-400 space-y-1">
-            <div className="text-slate-300 font-semibold">💡 직접 복사해서 저장하는 경우:</div>
-            <div>1. 메모장을 엽니다.</div>
-            <div>2. [전체 코드 복사] 버튼을 눌러 붙여넣기합니다.</div>
-            <div>3. 저장할 때 파일 형식을 <strong>'모든 파일(*.*)'</strong>, 파일 이름을 <strong>'NEWSchoolWidget.ps1'</strong>, 인코딩을 <strong>'UTF-8'</strong>로 저장하세요.</div>
-          </div>
-        </div>
-
-        {/* Step 2 */}
-        <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3 relative overflow-hidden">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-sm flex items-center justify-center">
-                2
-              </span>
-              <h4 className="text-base font-bold text-white">스크립트 실행 권한 허용 (최초 1회)</h4>
-            </div>
-            <span className="text-[13px] text-amber-400 font-medium">필수 설정</span>
-          </div>
-
-          <p className="text-sm text-slate-300 leading-relaxed">
-            윈도우 기본 보안으로 인해 스크립트 실행이 차단되어 있을 수 있습니다. 아래 명령어로 본인 계정의 스크립트 실행을 1회 허용해 줍니다.
-          </p>
-
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between text-[13px] text-slate-400">
-              <span>PowerShell 창에 붙여넣을 명령어:</span>
-              <button
-                type="button"
-                onClick={() => copyText('Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force', 1)}
-                className="text-blue-400 hover:text-blue-300 flex items-center gap-1 font-semibold"
-              >
-                {copiedIndex === 1 ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                <span>{copiedIndex === 1 ? '복사됨' : '명령어 복사'}</span>
-              </button>
-            </div>
-            <div className="p-2 rounded-lg bg-slate-950 font-mono text-[13px] text-emerald-400 border border-slate-800 select-all overflow-x-auto">
-              Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
-            </div>
-          </div>
-        </div>
-
-        {/* Step 3 */}
-        <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3 relative overflow-hidden">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-sm flex items-center justify-center">
-                3
-              </span>
-              <h4 className="text-base font-bold text-white">마우스 우클릭으로 바로 실행</h4>
+              <h4 className="text-base font-bold text-white">위젯 바로 실행</h4>
             </div>
             <span className="text-[13px] text-emerald-400 font-medium">실행 방법</span>
           </div>
@@ -197,6 +139,70 @@ const GuideSection: React.FC = () => {
           <div className="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/20 text-[13px] text-emerald-300 flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 shrink-0" />
             <span>실행 즉시 모니터 우측 상단에 투명 아크릴 위젯이 깔끔하게 부착됩니다!</span>
+          </div>
+        </div>
+
+        {/* Step 2 */}
+        <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3 relative overflow-hidden">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-sm flex items-center justify-center">
+                2
+              </span>
+              <h4 className="text-base font-bold text-white">스크립트 실행 권한 허용 (최초 1회)</h4>
+            </div>
+            <span className="text-[13px] text-amber-400 font-medium">필수 설정</span>
+          </div>
+
+          <p className="text-sm text-slate-300 leading-relaxed">
+            윈도우 기본 보안으로 인해 스크립트 실행이 차단되어 있을 수 있습니다. 아래 명령어로 본인 계정의 스크립트 실행을 1회 허용해 줍니다.
+          </p>
+
+          <div className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-[13px] text-slate-400 space-y-1">
+            <div className="text-slate-300 font-semibold">💡 먼저 PowerShell 창부터 엽니다:</div>
+            <div>1. 키보드에서 <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-white font-mono">Win + R</kbd> 키를 누릅니다.</div>
+            <div>2. 실행 창에 <code className="text-blue-400">powershell</code> 을 입력하고 Enter를 누르면 파란색 파워쉘 창이 열립니다.</div>
+          </div>
+
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-[13px] text-slate-400">
+              <span>열린 PowerShell 창에 붙여넣을 명령어:</span>
+              <button
+                type="button"
+                onClick={() => copyText('Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force', 1)}
+                className="text-blue-400 hover:text-blue-300 flex items-center gap-1 font-semibold"
+              >
+                {copiedIndex === 1 ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                <span>{copiedIndex === 1 ? '복사됨' : '명령어 복사'}</span>
+              </button>
+            </div>
+            <div className="p-2 rounded-lg bg-slate-950 font-mono text-[13px] text-emerald-400 border border-slate-800 select-all overflow-x-auto">
+              Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+            </div>
+          </div>
+        </div>
+
+        {/* Step 3 */}
+        <div className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3 relative overflow-hidden">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold text-sm flex items-center justify-center">
+                3
+              </span>
+              <h4 className="text-base font-bold text-white">스크립트 파일 다운로드</h4>
+            </div>
+            <span className="text-[13px] text-blue-400 font-medium">초간단</span>
+          </div>
+
+          <p className="text-sm text-slate-300 leading-relaxed">
+            상단의 <strong>[.ps1 다운로드]</strong> 버튼을 눌러 <code>NEWSchoolWidget.ps1</code> 파일을 원하는 폴더(예: 바탕화면이나 내 문서)에 저장합니다.
+          </p>
+
+          <div className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 text-[13px] text-slate-400 space-y-1">
+            <div className="text-slate-300 font-semibold">💡 직접 복사해서 저장하는 경우:</div>
+            <div>1. 메모장을 엽니다.</div>
+            <div>2. [전체 코드 복사] 버튼을 눌러 붙여넣기합니다.</div>
+            <div>3. 저장할 때 파일 형식을 <strong>'모든 파일(*.*)'</strong>, 파일 이름을 <strong>'NEWSchoolWidget.ps1'</strong>, 인코딩을 <strong>'UTF-8'</strong>로 저장하세요.</div>
           </div>
         </div>
 
@@ -749,6 +755,7 @@ export default function App() {
               <ConfigPanel
                 config={config}
                 onUpdateConfig={setConfig}
+                compact
               />
             </div>
           </div>
