@@ -49,6 +49,7 @@ export interface WidgetConfig {
   widgetWidth: number; // default 320px
   userRole: 'teacher' | 'student';
   gradeClass?: string; // e.g. "3-2"
+  fontScale: number; // 0.85 ~ 1.3, 1.0 = 기본 글씨 크기
 }
 
 export interface MealData {

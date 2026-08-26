@@ -66,10 +66,12 @@ export function getMealTargetDate(now: Date = new Date(), switchTime = '13:30'):
   // If next day is Saturday (6), skip to Monday (+2)
   if (target.getDay() === 6) {
     target.setDate(target.getDate() + 2);
+    isNextDay = true;
   }
   // If next day is Sunday (0), skip to Monday (+1)
   else if (target.getDay() === 0) {
     target.setDate(target.getDate() + 1);
+    isNextDay = true;
   }
 
   return { targetDate: target, isNextDay };

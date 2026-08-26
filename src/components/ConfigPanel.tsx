@@ -512,8 +512,10 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                 {[
                   { id: 'dark-acrylic', name: '모던 다크 글래스', desc: '세련된 어두운 반투명' },
                   { id: 'light-acrylic', name: '클린 라이트 아크릴', desc: '밝고 산뜻한 화이트' },
+                  { id: 'slate-glass', name: '실버 슬레이트', desc: '차분한 스틸 그레이 톤' },
                   { id: 'emerald-glass', name: '에메랄드 포레스트', desc: '편안한 녹색 톤' },
                   { id: 'indigo-glass', name: '딥 인디고 블루', desc: '고급스러운 야간 톤' },
+                  { id: 'sakura-glass', name: '사쿠라 핑크', desc: '은은한 벚꽃 핑크 톤' },
                 ].map((th) => (
                   <button
                     key={th.id}
@@ -533,6 +535,26 @@ export const ConfigPanel: React.FC<ConfigPanelProps> = ({
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* Font Scale slider */}
+            <div>
+              <div className="flex justify-between text-xs font-semibold text-slate-300 mb-1">
+                <span>글씨 크기</span>
+                <span className="text-blue-400">{Math.round((config.fontScale ?? 1) * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min="0.85"
+                max="1.3"
+                step="0.05"
+                value={config.fontScale ?? 1}
+                onChange={(e) => onUpdateConfig({ ...config, fontScale: parseFloat(e.target.value) })}
+                className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+              />
+              <span className="text-[10px] text-slate-400 mt-1 block">
+                위젯 전체 글씨와 요소 크기가 이 비율만큼 함께 커지거나 작아집니다.
+              </span>
             </div>
 
             {/* Opacity slider */}

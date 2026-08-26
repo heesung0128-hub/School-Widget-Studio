@@ -1,22 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Calendar, 
-  Clock, 
-  Utensils, 
-  CheckSquare, 
-  Plus, 
-  Trash2, 
-  RotateCw, 
-  X, 
-  Sparkles, 
-  BookOpen, 
+import React, { useState, useRef, useEffect } from 'react';
+import {
+  Calendar,
+  Clock,
+  Utensils,
+  CheckSquare,
+  Plus,
+  Trash2,
+  RotateCw,
+  X,
+  Sparkles,
+  BookOpen,
   ChevronRight,
   Sun,
   Moon,
-  Move
+  Move,
+  GripVertical,
+  Monitor,
+  Layers,
+  HelpCircle,
+  Maximize2,
+  Sliders,
+  Terminal,
+  RefreshCw,
+  LayoutGrid
 } from 'lucide-react';
 import { WidgetConfig, MealData, TodoItem } from '../types';
-import { fetchNeisMeal } from '../utils/neisApi';
+import { fetchNeisMeal, getMealTargetDate, formatDateToYMD } from '../utils/neisApi';
 
 interface SchoolWidgetCardProps {
   config: WidgetConfig;
@@ -36,6 +45,7 @@ export const SchoolWidgetCard: React.FC<SchoolWidgetCardProps> = ({
   const [newTodoText, setNewTodoText] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'today' | 'week'>('today');
   const [selectedDay, setSelectedDay] = useState<'월' | '화' | '수' | '목' | '금'>('월');
+  const [draggedTodoId, setDraggedTodoId] = useState<string | null>(null);
 
   // Update clock every second
   useEffect(() => {
@@ -45,7 +55,13 @@ export const SchoolWidgetCard: React.FC<SchoolWidgetCardProps> = ({
     return () => clearInterval(timer);
   }, []);
 
-  // Fetch meal data on school/time change
+  // Which meal date the widget should currently be showing (flips exactly at mealSwitchTime,
+  // same as the generated PowerShell widget). Used as an effect dependency so the preview
+  // re-fetches the instant the 13:30 boundary is crossed, not just on mount/config change.
+  const { targetDate: mealTargetDate } = getMealTargetDate(currentTime, config.mealSwitchTime);
+  const mealDateKey = formatDateToYMD(mealTargetDate);
+
+  // Fetch meal data on school/time change, and whenever the target meal date flips
   useEffect(() => {
     let isMounted = true;
     setMealLoading(true);
@@ -62,7 +78,7 @@ export const SchoolWidgetCard: React.FC<SchoolWidgetCardProps> = ({
     return () => {
       isMounted = false;
     };
-  }, [config.school, config.mealSwitchTime, config.showAllergies]);
+  }, [config.school, config.mealSwitchTime, config.showAllergies, mealDateKey]);
 
   // Current day of week in Korean
   const daysKor: ('일' | '월' | '화' | '수' | '목' | '금' | '토')[] = ['일', '월', '화', '수', '목', '금', '토'];
@@ -107,6 +123,26 @@ export const SchoolWidgetCard: React.FC<SchoolWidgetCardProps> = ({
     });
   };
 
+  // Drag-to-reorder todos
+  const handleTodoDragStart = (id: string) => (e: React.DragEvent) => {
+    setDraggedTodoId(id);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleTodoDragOver = (id: string) => (e: React.DragEvent) => {
+    e.preventDefault();
+    if (!onUpdateConfig || !draggedTodoId || draggedTodoId === id) return;
+    const fromIndex = config.todos.findIndex((t) => t.id === draggedTodoId);
+    const toIndex = config.todos.findIndex((t) => t.id === id);
+    if (fromIndex === -1 || toIndex === -1) return;
+    const reordered = [...config.todos];
+    const [moved] = reordered.splice(fromIndex, 1);
+    reordered.splice(toIndex, 0, moved);
+    onUpdateConfig({ ...config, todos: reordered });
+  };
+
+  const handleTodoDragEnd = () => setDraggedTodoId(null);
+
   // Calculate D-Days
   const getDDayCalc = (targetDateStr: string) => {
     const today = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate());
@@ -148,6 +184,24 @@ export const SchoolWidgetCard: React.FC<SchoolWidgetCardProps> = ({
       accent: 'text-blue-600',
       accentBg: 'bg-blue-600 hover:bg-blue-700 text-white',
     },
+    'slate-glass': {
+      container: 'bg-slate-700/85 text-slate-50 backdrop-blur-xl border-slate-500/50 shadow-2xl shadow-black/60',
+      card: 'bg-slate-600/60 border-slate-500/50',
+      border: 'border-slate-500/40',
+      text: 'text-slate-50',
+      subText: 'text-slate-300',
+      accent: 'text-sky-400',
+      accentBg: 'bg-sky-600 hover:bg-sky-500 text-white',
+    },
+    'sakura-glass': {
+      container: 'bg-pink-950/90 text-pink-50 backdrop-blur-xl border-pink-700/50 shadow-2xl shadow-black/60',
+      card: 'bg-pink-900/60 border-pink-700/50',
+      border: 'border-pink-700/40',
+      text: 'text-pink-50',
+      subText: 'text-pink-300',
+      accent: 'text-pink-400',
+      accentBg: 'bg-pink-600 hover:bg-pink-500 text-white',
+    },
     'emerald-glass': {
       container: 'bg-emerald-950/90 text-emerald-50 backdrop-blur-xl border-emerald-700/50 shadow-2xl shadow-black/60',
       card: 'bg-emerald-900/60 border-emerald-700/50',
@@ -184,11 +238,12 @@ export const SchoolWidgetCard: React.FC<SchoolWidgetCardProps> = ({
       style={{
         width: `${config.widgetWidth || 330}px`,
         opacity: config.opacity || 0.95,
+        zoom: config.fontScale || 1,
       }}
     >
       {/* Top Header / Drag Bar */}
-      <div 
-        id="widget-drag-header" 
+      <div
+        id="widget-drag-header"
         className="px-4 pt-3.5 pb-2.5 flex items-start justify-between cursor-move border-b border-white/5"
       >
         <div>
@@ -203,6 +258,7 @@ export const SchoolWidgetCard: React.FC<SchoolWidgetCardProps> = ({
           <div className="mt-1 flex items-baseline gap-2">
             <h2 className="text-base font-bold tracking-tight">
               {currentTime.toLocaleDateString('ko-KR', {
+                year: 'numeric',
                 month: 'long',
                 day: 'numeric',
                 weekday: 'short',
@@ -219,8 +275,8 @@ export const SchoolWidgetCard: React.FC<SchoolWidgetCardProps> = ({
         </div>
 
         <div className="flex items-center gap-1 text-slate-400">
-          <div 
-            title="마우스로 잡고 이동 (손을 떼면 우측 상단 자동 고정)" 
+          <div
+            title="마우스로 잡고 이동 (손을 떼면 우측 상단 자동 고정)"
             className="p-1 rounded hover:bg-white/10 hover:text-white transition-colors"
           >
             <Move className="w-3.5 h-3.5" />
@@ -258,7 +314,7 @@ export const SchoolWidgetCard: React.FC<SchoolWidgetCardProps> = ({
         )}
 
         {/* Timetable Section (1-4교시 / 5-7교시 2열 배치) */}
-        <div 
+        <div
           id="widget-timetable-section"
           className={`rounded-xl p-2.5 border transition-all ${currentTheme.card}`}
         >
@@ -342,7 +398,7 @@ export const SchoolWidgetCard: React.FC<SchoolWidgetCardProps> = ({
         </div>
 
         {/* NEIS Meal Section (스크롤 없이 2열 그리드로 모든 메뉴 표시) */}
-        <div 
+        <div
           id="widget-meal-section"
           className={`rounded-xl p-2.5 border transition-all ${currentTheme.card}`}
         >
@@ -395,7 +451,7 @@ export const SchoolWidgetCard: React.FC<SchoolWidgetCardProps> = ({
         </div>
 
         {/* TO-DO List Section (Dynamic Height) */}
-        <div 
+        <div
           id="widget-todo-section"
           className={`rounded-xl p-2.5 border transition-all ${currentTheme.card}`}
         >
@@ -436,21 +492,30 @@ export const SchoolWidgetCard: React.FC<SchoolWidgetCardProps> = ({
               config.todos.map((todo) => (
                 <div
                   key={todo.id}
+                  draggable={!!onUpdateConfig}
+                  onDragStart={handleTodoDragStart(todo.id)}
+                  onDragOver={handleTodoDragOver(todo.id)}
+                  onDragEnd={handleTodoDragEnd}
                   className={`group flex items-center justify-between p-1.5 rounded-lg border transition-all ${
+                    draggedTodoId === todo.id ? 'opacity-40' : ''
+                  } ${
                     todo.completed
                       ? 'bg-black/10 border-white/5 text-slate-400 opacity-60 line-through'
                       : 'bg-white/5 border-white/10 text-slate-200'
                   }`}
                 >
-                  <label className="flex items-center gap-2 flex-1 cursor-pointer truncate">
-                    <input
-                      type="checkbox"
-                      checked={todo.completed}
-                      onChange={() => handleToggleTodo(todo.id)}
-                      className="w-3.5 h-3.5 rounded bg-slate-800 border-slate-600 text-blue-500 focus:ring-0 cursor-pointer"
-                    />
-                    <span className="text-[11px] truncate select-text">{todo.text}</span>
-                  </label>
+                  <div className="flex items-center gap-1 flex-1 min-w-0">
+                    <GripVertical className="w-3.5 h-3.5 text-slate-500 shrink-0 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <label className="flex items-center gap-2 flex-1 cursor-pointer truncate">
+                      <input
+                        type="checkbox"
+                        checked={todo.completed}
+                        onChange={() => handleToggleTodo(todo.id)}
+                        className="w-3.5 h-3.5 rounded bg-slate-800 border-slate-600 text-blue-500 focus:ring-0 cursor-pointer"
+                      />
+                      <span className="text-[11px] truncate select-text">{todo.text}</span>
+                    </label>
+                  </div>
                   <button
                     type="button"
                     onClick={() => handleDeleteTodo(todo.id)}
@@ -465,10 +530,251 @@ export const SchoolWidgetCard: React.FC<SchoolWidgetCardProps> = ({
           </div>
         </div>
       </div>
+    </div>
+  );
+};
 
-      {/* Footer info */}
-      <div className="px-3.5 py-2 bg-black/20 border-t border-white/5 text-center text-[10px] text-slate-400">
-        💡 바탕화면에서 마우스로 드래그 후 놓으면 우측 상단 자동 밀착
+interface DesktopSimulatorProps {
+  config: WidgetConfig;
+  onUpdateConfig: (newConfig: WidgetConfig) => void;
+}
+
+export const DesktopSimulator: React.FC<DesktopSimulatorProps> = ({
+  config,
+  onUpdateConfig,
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [wallpaper, setWallpaper] = useState<'bloom' | 'nature' | 'minimal' | 'dark'>('bloom');
+  const [dualMonitor, setDualMonitor] = useState<boolean>(false);
+  const [activeMonitor, setActiveMonitor] = useState<1 | 2>(1);
+  const [snappedMessage, setSnappedMessage] = useState<string | null>(null);
+
+  // Initialize position to top-right on mount or container resize
+  const snapToTopRight = (monitorIndex: 1 | 2 = activeMonitor) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const margin = config.snapMargin || 20;
+    const widgetWidth = config.widgetWidth || 330;
+
+    let targetX = rect.width - widgetWidth - margin;
+    if (dualMonitor) {
+      const halfWidth = rect.width / 2;
+      if (monitorIndex === 1) {
+        // First monitor top-right
+        targetX = halfWidth - widgetWidth - margin;
+      } else {
+        // Second monitor top-right
+        targetX = rect.width - widgetWidth - margin;
+      }
+    }
+
+    setPosition({
+      x: Math.max(margin, targetX),
+      y: margin,
+    });
+
+    setSnappedMessage(`모니터 ${monitorIndex} 우측 상단으로 자동 스냅되었습니다!`);
+    setTimeout(() => setSnappedMessage(null), 2500);
+  };
+
+  useEffect(() => {
+    snapToTopRight(activeMonitor);
+  }, [dualMonitor, config.snapMargin, config.widgetWidth]);
+
+  // Drag handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    // Only allow drag when clicking header or drag handle
+    const target = e.target as HTMLElement;
+    if (target.closest('button') || target.closest('input') || target.closest('form')) {
+      return;
+    }
+
+    setIsDragging(true);
+    if (containerRef.current) {
+      const containerRect = containerRef.current.getBoundingClientRect();
+      setDragOffset({
+        x: e.clientX - containerRect.left - position.x,
+        y: e.clientY - containerRect.top - position.y,
+      });
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !containerRef.current) return;
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const newX = e.clientX - containerRect.left - dragOffset.x;
+    const newY = e.clientY - containerRect.top - dragOffset.y;
+
+    setPosition({
+      x: Math.max(10, Math.min(containerRect.width - (config.widgetWidth || 330) - 10, newX)),
+      y: Math.max(10, Math.min(containerRect.height - 150, newY)),
+    });
+  };
+
+  const handleMouseUp = () => {
+    if (!isDragging || !containerRef.current) return;
+    setIsDragging(false);
+
+    // Determine which monitor the widget was dropped in
+    const containerRect = containerRef.current.getBoundingClientRect();
+    let targetMon: 1 | 2 = 1;
+    if (dualMonitor) {
+      const midPoint = containerRect.width / 2;
+      targetMon = position.x > midPoint ? 2 : 1;
+      setActiveMonitor(targetMon);
+    }
+
+    // Snap to top-right of that monitor
+    snapToTopRight(targetMon);
+  };
+
+  // Wallpaper styles
+  const wallpapers = {
+    bloom: 'bg-gradient-to-br from-indigo-900 via-slate-900 to-sky-950',
+    nature: 'bg-gradient-to-br from-emerald-950 via-teal-900 to-slate-900',
+    minimal: 'bg-gradient-to-br from-slate-900 via-zinc-900 to-stone-900',
+    dark: 'bg-gradient-to-br from-black via-slate-950 to-neutral-900',
+  };
+
+  return (
+    <div className="flex flex-col h-full space-y-3">
+      {/* Desktop Toolbar */}
+      <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-slate-900/60 border border-slate-800 rounded-xl text-xs text-slate-300">
+        <div className="flex items-center gap-2">
+          <span className="font-bold flex items-center gap-1.5 text-slate-200">
+            <Monitor className="w-4 h-4 text-blue-400" />
+            윈도우 바탕화면 실시간 시뮬레이터
+          </span>
+          <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[11px]">
+            드래그 후 손을 떼면 우측 상단 자동 스냅
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {/* Dual monitor toggle */}
+          <button
+            type="button"
+            onClick={() => setDualMonitor(!dualMonitor)}
+            className={`px-2.5 py-1 rounded-lg border font-medium flex items-center gap-1.5 transition-colors ${
+              dualMonitor
+                ? 'bg-blue-600 border-blue-500 text-white'
+                : 'bg-slate-800 border-slate-700 hover:bg-slate-700 text-slate-300'
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5" />
+            <span>{dualMonitor ? '듀얼 모니터 (ON)' : '싱글 모니터'}</span>
+          </button>
+
+          {/* Reset position button */}
+          <button
+            type="button"
+            onClick={() => snapToTopRight(activeMonitor)}
+            className="px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 hover:bg-slate-700 text-slate-300 flex items-center gap-1 transition-colors"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span>위치 재정렬</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Interactive Mock Desktop Canvas */}
+      <div
+        ref={containerRef}
+        id="windows-mock-desktop"
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        className={`relative w-full min-h-[680px] h-[680px] rounded-2xl border border-slate-700/60 overflow-hidden shadow-inner select-none ${wallpapers[wallpaper]}`}
+      >
+        {/* Subtle grid and decorative background elements */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.15),rgba(255,255,255,0))]" />
+
+        {/* Dual monitor divider indicator */}
+        {dualMonitor && (
+          <div className="absolute top-0 bottom-10 left-1/2 -translate-x-1/2 border-r-2 border-dashed border-white/20 flex flex-col items-center justify-start pt-3 z-0 pointer-events-none">
+            <span className="px-2 py-0.5 rounded bg-black/60 text-[10px] text-slate-300 border border-white/10 backdrop-blur-sm">
+              🖥️ 모니터 1 ┃ 🖥️ 모니터 2 (구분선)
+            </span>
+          </div>
+        )}
+
+        {/* Snapped Notification Toast */}
+        {snappedMessage && (
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 px-3 py-1.5 rounded-full bg-blue-600/90 text-white text-xs font-semibold shadow-lg backdrop-blur-md flex items-center gap-1.5 animate-bounce">
+            <Sparkles className="w-3.5 h-3.5" />
+            {snappedMessage}
+          </div>
+        )}
+
+        {/* Desktop Icons Placeholder (Adds Windows realism) */}
+        <div className="absolute top-4 left-4 space-y-3 z-10 pointer-events-none">
+          <div className="flex flex-col items-center w-16 p-1.5 rounded hover:bg-white/10 text-white/90 text-center">
+            <div className="w-8 h-8 rounded-lg bg-blue-500/30 border border-blue-400/40 flex items-center justify-center text-sm shadow-sm mb-1">
+              📂
+            </div>
+            <span className="text-[10px] drop-shadow-md font-medium">내 PC</span>
+          </div>
+          <div className="flex flex-col items-center w-16 p-1.5 rounded hover:bg-white/10 text-white/90 text-center">
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/30 border border-emerald-400/40 flex items-center justify-center text-sm shadow-sm mb-1">
+              🗑️
+            </div>
+            <span className="text-[10px] drop-shadow-md font-medium">휴지통</span>
+          </div>
+          <div className="flex flex-col items-center w-16 p-1.5 rounded hover:bg-white/10 text-white/90 text-center">
+            <div className="w-8 h-8 rounded-lg bg-amber-500/30 border border-amber-400/40 flex items-center justify-center text-sm shadow-sm mb-1">
+              🏫
+            </div>
+            <span className="text-[10px] drop-shadow-md font-medium">나이스</span>
+          </div>
+        </div>
+
+        {/* Draggable Widget Component */}
+        <div
+          id="draggable-school-widget"
+          onMouseDown={handleMouseDown}
+          className={`absolute z-20 transition-all ${
+            isDragging ? 'cursor-grabbing scale-[1.01] shadow-2xl opacity-90' : 'transition-all duration-300 ease-out'
+          }`}
+          style={{
+            transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
+          }}
+        >
+          <SchoolWidgetCard
+            config={config}
+            onUpdateConfig={onUpdateConfig}
+            isDraggable
+          />
+        </div>
+
+        {/* Windows 11 Taskbar Simulation */}
+        <div className="absolute bottom-0 left-0 right-0 h-11 bg-slate-950/80 backdrop-blur-xl border-t border-slate-700/50 flex items-center justify-between px-3 z-30">
+          {/* Windows Start and Center Icons */}
+          <div className="flex items-center gap-1.5 mx-auto">
+            <div className="w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center text-blue-400 font-bold text-sm cursor-pointer transition-colors">
+              🪟
+            </div>
+            <div className="w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center text-slate-300 text-xs cursor-pointer transition-colors">
+              🔍
+            </div>
+            <div className="w-7 h-7 rounded-md bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-300 text-xs cursor-pointer">
+              🏫
+            </div>
+            <div className="w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center text-slate-300 text-xs cursor-pointer transition-colors">
+              📁
+            </div>
+          </div>
+
+          {/* System Tray (Clock & Wifi) */}
+          <div className="flex items-center gap-2 text-slate-300 text-xs font-mono">
+            <span className="text-[11px] text-slate-400">ENG</span>
+            <div className="text-right leading-tight text-[10px]">
+              <div>{new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</div>
+              <div className="text-slate-400">{new Date().toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' })}</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
